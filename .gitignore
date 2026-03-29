@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+backup/
+
+
+# Node (just in case you add npm scripts later)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output (if you ever add a build step)
+dist/
+build/

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A premium, glassmorphic Markdown note-taking app.">
+    <title>Markdown Web | Premium Note-Taking</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Code Highlighting Theme -->
+    <link rel="stylesheet" href="assets/css/tokyo-night-dark.min.css">
+    
+    <!-- Load Dependencies BEFORE Monaco to avoid AMD conflicts -->
+    <script src="assets/js/marked.min.js"></script>
+    <script src="assets/js/highlight.min.js"></script>
+    <script src="assets/js/html2pdf.bundle.min.js"></script>
+    <script src="assets/js/lucide.min.js"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <header class="sidebar-header">
+            <h1>Notes</h1>
+            <button class="btn btn-primary" id="new-note-btn">
+                <i data-lucide="plus"></i>
+                <span>New Note</span>
+            </button>
+        </header>
+        <div class="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="Search notes...">
+        </div>
+        <div class="note-list" id="note-list"></div>
+    </aside>
+
+    <main class="workspace">
+        <header class="workspace-header">
+            <div style="display: flex; flex-direction: column; flex: 1; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="btn" id="toggle-sidebar" title="Toggle Sidebar">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <input type="text" id="note-title-input" placeholder="Untitled Note">
+                </div>
+                <div class="metadata" id="note-metadata">
+                    <span id="created-at">Created: --</span>
+                    <span id="updated-at">Updated: --</span>
+                    <div class="tag-container">
+                        <i data-lucide="tag"></i>
+                        <input type="text" id="note-tags-input" placeholder="Add tags...">
+                    </div>
+                </div>
+            </div>
+            <div class="toolbar" id="toolbar-actions">
+                <button class="btn" id="copy-markdown-btn" title="Copy Markdown">
+                    <i data-lucide="file-text"></i>
+                    Copy MD
+                </button>
+                <button class="btn" id="copy-preview-btn" title="Copy Preview">
+                    <i data-lucide="file-code"></i>
+                    Copy HTML
+                </button>
+                <button class="btn" id="export-btn" title="Export Note">
+                    <i data-lucide="download"></i>
+                    PDF
+                </button>
+                <button class="btn" id="delete-note-btn" title="Delete Note">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            </div>
+        </header>
+
+
+        <div class="pane-container">
+            <div class="pane editor-pane">
+                <div class="style-ribbon">
+                    <button class="ribbon-btn" id="btn-bold" title="Bold">
+                        <i data-lucide="bold"></i>
+                    </button>
+                    <button class="ribbon-btn" id="btn-italic" title="Italic">
+                        <i data-lucide="italic"></i>
+                    </button>
+                    <div class="ribbon-divider"></div>
+                    <button class="ribbon-btn" id="btn-heading-1" title="Heading 1">
+                        <i data-lucide="heading-1"></i>
+                    </button>
+                    <button class="ribbon-btn" id="btn-heading-2" title="Heading 2">
+                        <i data-lucide="heading-2"></i>
+                    </button>
+                    <div class="ribbon-divider"></div>
+                    <button class="ribbon-btn" id="btn-list-unordered" title="Unordered List">
+                        <i data-lucide="list"></i>
+                    </button>
+                    <button class="ribbon-btn" id="btn-list-ordered" title="Ordered List">
+                        <i data-lucide="list-ordered"></i>
+                    </button>
+                    <div class="ribbon-divider"></div>
+                    <button class="ribbon-btn" id="btn-link" title="Link">
+                        <i data-lucide="link"></i>
+                    </button>
+                    <button class="ribbon-btn" id="btn-image-upload" title="Upload Image">
+                        <i data-lucide="upload"></i>
+                    </button>
+                    <button class="ribbon-btn" id="btn-image-url" title="Image URL">
+                        <i data-lucide="image"></i>
+                    </button>
+                    <div class="ribbon-divider"></div>
+                    <div style="display: flex; align-items: center; gap: 0.25rem;">
+                        <button class="ribbon-btn" id="btn-color" title="Text Color">
+                            <i data-lucide="palette"></i>
+                        </button>
+                        <input type="color" id="note-color-picker" style="display: none;">
+                        <button class="ribbon-btn" id="btn-font-size" title="Font Size">
+                            <i data-lucide="type"></i>
+                        </button>
+                        <select id="note-font-size-picker" style="display: none;">
+                            <option value="12px">Small</option>
+                            <option value="16px">Normal</option>
+                            <option value="20px">Large</option>
+                            <option value="24px">Huge</option>
+                            <option value="32px">Title</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="editor-container" style="flex: 1;"></div>
+            </div>
+            <div class="gutter" id="resizer"></div>
+            <div class="pane preview-pane" id="preview-container"></div>
+        </div>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal">
+            <h2 style="color: #f7768e">Delete Note</h2>
+            <p>Are you sure you want to delete this note? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn" id="cancel-delete">Cancel</button>
+                <button class="btn" id="confirm-delete" style="background: #f7768e; border-color: #f7768e; color: #1a1b26; font-weight: 600;">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden File Input for Image Upload -->
+    <input type="file" id="image-upload-input" accept="image/*" style="display: none;">
+
+    <!-- Monaco Editor Loader -->
+    <script src="assets/js/monaco/vs/loader.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
