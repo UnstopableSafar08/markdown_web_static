@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A premium, glassmorphic Markdown note-taking app.">
     <title>Markdown Web | Premium Note-Taking</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <link rel="stylesheet" href="assets/css/style.css">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <!-- Code Highlighting Theme -->
     <link rel="stylesheet" href="assets/css/tokyo-night-dark.min.css">
-    
+
     <!-- Load Dependencies BEFORE Monaco to avoid AMD conflicts -->
     <script src="assets/js/marked.min.js"></script>
     <script src="assets/js/highlight.min.js"></script>
     <script src="assets/js/html2pdf.bundle.min.js"></script>
     <script src="assets/js/lucide.min.js"></script>
 </head>
+
 <body>
     <aside class="sidebar">
         <header class="sidebar-header">
@@ -139,7 +144,8 @@
             <p>Are you sure you want to delete this note? This action cannot be undone.</p>
             <div class="modal-actions">
                 <button class="btn" id="cancel-delete">Cancel</button>
-                <button class="btn" id="confirm-delete" style="background: #f7768e; border-color: #f7768e; color: #1a1b26; font-weight: 600;">Delete</button>
+                <button class="btn" id="confirm-delete"
+                    style="background: #f7768e; border-color: #f7768e; color: #1a1b26; font-weight: 600;">Delete</button>
             </div>
         </div>
     </div>
@@ -151,4 +157,5 @@
     <script src="assets/js/monaco/vs/loader.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
+
 </html>
