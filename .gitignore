@@ -9,11 +9,17 @@
 *.swp
 *.swo
 *~
+.qoder
+
+# claudecode
+.claude
+.claudeignore
 
 # Temporary files
 *.tmp
-backup/
-
+backup
+prompt.md
+exported-html-sample.html
 
 # Node (just in case you add npm scripts later)
 node_modules
@@ -23,3 +29,4 @@ yarn-error.log
 # Build output (if you ever add a build step)
 dist/
 build/
+
