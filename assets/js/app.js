@@ -305,8 +305,48 @@ function setupEventListeners() {
   document.getElementById("search-input").oninput = renderNoteList;
 
   document.getElementById("toggle-sidebar").onclick = () => {
-    document.querySelector(".sidebar").classList.toggle("collapsed");
-    setTimeout(() => editor.layout(), 350);
+    const sidebar = document.querySelector(".sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+    const isMobile = window.innerWidth <= 767;
+
+    sidebar.classList.toggle("collapsed");
+
+    if (isMobile) {
+      if (sidebar.classList.contains("collapsed")) {
+        overlay.classList.remove("show");
+      } else {
+        overlay.classList.add("show");
+      }
+    }
+
+    if (editor) {
+      setTimeout(() => editor.layout(), 350);
+    }
+  };
+
+  // Close sidebar when clicking overlay on mobile
+  const overlay = document.getElementById("sidebar-overlay");
+  if (overlay) {
+    overlay.onclick = () => {
+      const sidebar = document.querySelector(".sidebar");
+      sidebar.classList.add("collapsed");
+      overlay.classList.remove("show");
+      if (editor) {
+        setTimeout(() => editor.layout(), 350);
+      }
+    };
+  }
+
+  // Handle window resize
+  window.onresize = () => {
+    const sidebar = document.querySelector(".sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+    if (window.innerWidth > 767) {
+      sidebar.classList.remove("open");
+      if (overlay) {
+        overlay.classList.remove("show");
+      }
+    }
   };
 
   // Style Ribbon Logic

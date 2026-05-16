@@ -460,3 +460,405 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+/* ===========================
+   RESPONSIVE STYLES
+   =========================== */
+
+/* Tablet Breakpoint (768px - 1023px) */
+@media screen and (max-width: 1023px) {
+  :root {
+    --sidebar-width: 240px;
+  }
+
+  .sidebar-header {
+    padding: 1rem;
+  }
+
+  .sidebar-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .search-container {
+    padding: 0.75rem;
+  }
+
+  .workspace-header {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .workspace-header input#note-title-input {
+    font-size: 1.3rem;
+  }
+
+  .metadata {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .btn span {
+    display: none;
+  }
+
+  .toolbar .btn i {
+    width: 16px;
+    height: 16px;
+  }
+
+  .pane-header {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.65rem;
+  }
+
+  .style-ribbon {
+    padding: 0.25rem 0.5rem;
+    gap: 0.2rem;
+    overflow-x: auto;
+  }
+
+  .ribbon-btn {
+    padding: 0.1rem;
+  }
+
+  #preview-container {
+    padding: 1.5rem;
+  }
+
+  #preview-container h1 {
+    font-size: 1.5rem;
+  }
+
+  #preview-container h2 {
+    font-size: 1.3rem;
+  }
+
+  #preview-container h3 {
+    font-size: 1.15rem;
+  }
+
+  #preview-container pre {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Mobile Breakpoint (below 768px) */
+@media screen and (max-width: 767px) {
+  :root {
+    --sidebar-width: 100%;
+  }
+
+  body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85%;
+    max-width: 300px;
+    height: 100%;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+    margin-right: 0;
+  }
+
+  .sidebar-header {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .sidebar-header .btn-primary span {
+    display: inline;
+  }
+
+  .note-list {
+    padding: 0.25rem;
+  }
+
+  .note-item {
+    padding: 0.75rem;
+  }
+
+  .workspace {
+    width: 100%;
+  }
+
+  .workspace-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .workspace-header > div:first-child {
+    flex: unset;
+    gap: 0.5rem;
+  }
+
+  .workspace-header input#note-title-input {
+    font-size: 1.15rem;
+  }
+
+  .metadata {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .tag-container {
+    width: 100%;
+  }
+
+  .tag-container input {
+    width: 100%;
+  }
+
+  .toolbar {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .toolbar .btn span {
+    display: inline;
+  }
+
+  .toolbar .btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  .pane-container {
+    flex-direction: column;
+  }
+
+  .editor-pane {
+    flex: none;
+    height: 50%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .preview-pane {
+    flex: none;
+    height: 50%;
+  }
+
+  .gutter {
+    display: none;
+  }
+
+  .style-ribbon {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+  }
+
+  #preview-container {
+    padding: 1rem;
+  }
+
+  #preview-container h1 {
+    font-size: 1.4rem;
+  }
+
+  #preview-container h2 {
+    font-size: 1.2rem;
+  }
+
+  #preview-container h3 {
+    font-size: 1.1rem;
+  }
+
+  #preview-container p {
+    font-size: 0.95rem;
+  }
+
+  #preview-container pre {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+
+  #preview-container code {
+    font-size: 0.8rem;
+  }
+
+  .modal {
+    padding: 1.5rem;
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+
+  .modal h2 {
+    font-size: 1.25rem;
+  }
+
+  .modal p {
+    font-size: 0.9rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Small Mobile (below 480px) */
+@media screen and (max-width: 479px) {
+  .sidebar-header h1 {
+    font-size: 1rem;
+  }
+
+  .sidebar-header .btn-primary span {
+    display: none;
+  }
+
+  .workspace-header input#note-title-input {
+    font-size: 1rem;
+  }
+
+  .toolbar .btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .pane-header {
+    font-size: 0.6rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  #preview-container {
+    padding: 0.75rem;
+  }
+
+  #preview-container h1 {
+    font-size: 1.25rem;
+  }
+
+  #preview-container h2 {
+    font-size: 1.1rem;
+  }
+
+  #preview-container p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
+
+/* Overlay for mobile sidebar */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+@media screen and (max-width: 767px) {
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .sidebar-overlay.show {
+    opacity: 1;
+  }
+}
+
+/* Landscape mode adjustments */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .sidebar-header {
+    padding: 0.5rem 1rem;
+  }
+
+  .search-container {
+    padding: 0.5rem;
+  }
+
+  .note-item {
+    padding: 0.5rem;
+  }
+
+  .note-item h3 {
+    font-size: 0.85rem;
+  }
+
+  .note-item p {
+    font-size: 0.7rem;
+  }
+
+  .workspace-header {
+    padding: 0.5rem 0.75rem;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .metadata {
+    flex-direction: row;
+  }
+
+  .pane-container {
+    flex-direction: row;
+  }
+
+  .editor-pane,
+  .preview-pane {
+    height: 100%;
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  .btn,
+  .ribbon-btn,
+  .note-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .ribbon-btn {
+    padding: 0.25rem;
+  }
+
+  .note-item {
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  #preview-container pre {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
