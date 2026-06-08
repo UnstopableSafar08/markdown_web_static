@@ -65,6 +65,12 @@ function init() {
   setTimeout(() => {
     if (window.lucide) lucide.createIcons();
   }, 100);
+  if (typeof mermaid !== "undefined") {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "dark",
+    });
+  }
 }
 
 function createNewNote() {
@@ -154,7 +160,15 @@ function renderMarkdown(content) {
   let html = "";
   try {
     if (typeof marked !== "undefined" && marked.parse) {
-      html = marked.parse(content);
+      const renderer = new marked.Renderer();
+      renderer.code = function ({ text, lang }) {
+        if (lang === "mermaid") {
+          return '<pre class="mermaid">' + text + "</pre>";
+        }
+        const langAttr = lang ? ' class="language-' + lang + '"' : "";
+        return "<pre><code" + langAttr + ">" + text + "</code></pre>";
+      };
+      html = marked.parse(content, { renderer });
     } else if (window.marked && window.marked.parse) {
       html = window.marked.parse(content);
     } else {
@@ -170,6 +184,12 @@ function renderMarkdown(content) {
     preview.querySelectorAll("pre code").forEach((block) => {
       hljs.highlightElement(block);
       addCopyButtonToCode(block);
+    });
+  }
+
+  if (typeof mermaid !== "undefined") {
+    mermaid.run({
+      nodes: preview.querySelectorAll(".mermaid"),
     });
   }
 }
@@ -498,6 +518,7 @@ function setupEventListeners() {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"><\/script>
   <style>
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -683,6 +704,16 @@ function setupEventListeners() {
       color: #0366d6;
     }
 
+    .mermaid {
+      text-align: center;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: #1a1b26;
+      border-radius: 8px;
+      border: 1px solid #333;
+      overflow-x: auto;
+    }
+
     /* Syntax Highlighting - Tokyo Night Dark Theme */
     pre code.hljs {
       display: block;
@@ -782,6 +813,9 @@ function setupEventListeners() {
   <button id="goTopBtn" onclick="scrollToTop()">TOP⬆️</button>
 
   <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    }
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.onclick = function() {
         const pre = this.parentElement;
@@ -860,15 +894,23 @@ function setupEventListeners() {
       `<h1>${note.title}</h1><p><small>Created: ${formatDate(note.createdAt)} | Updated: ${formatDate(note.updatedAt)}</small></p><p><strong>Tags:</strong> ${note.tags || "none"}</p><hr>` +
       renderMarkdownInternal(note.content);
 
-    html2pdf()
-      .from(temp)
-      .set({
-        margin: 1,
-        filename: `${note.title}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-      })
-      .save();
+    const renderPdf = () => {
+      html2pdf()
+        .from(temp)
+        .set({
+          margin: 1,
+          filename: `${note.title}.pdf`,
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        })
+        .save();
+    };
+
+    if (typeof mermaid !== "undefined" && temp.querySelector(".mermaid")) {
+      mermaid.run({ nodes: temp.querySelectorAll(".mermaid") }).then(renderPdf);
+    } else {
+      renderPdf();
+    }
   };
 }
 
@@ -895,8 +937,19 @@ function showToast(msg) {
 }
 
 function renderMarkdownInternal(content) {
+  const doParse = (parser) => {
+    const renderer = new parser.Renderer();
+    renderer.code = function ({ text, lang }) {
+      if (lang === "mermaid") {
+        return '<pre class="mermaid">' + text + "</pre>";
+      }
+      const langAttr = lang ? ' class="language-' + lang + '"' : "";
+      return "<pre><code" + langAttr + ">" + text + "</code></pre>";
+    };
+    return parser.parse(content, { renderer });
+  };
   if (typeof window.marked !== "undefined" && window.marked.parse)
-    return window.marked.parse(content);
-  if (typeof marked !== "undefined") return marked.parse(content);
+    return doParse(window.marked);
+  if (typeof marked !== "undefined") return doParse(marked);
   return content;
 }

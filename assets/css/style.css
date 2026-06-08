@@ -347,6 +347,15 @@ body {
   overflow-x: auto;
 }
 
+#preview-container .mermaid {
+  text-align: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #1a1b26;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
 #preview-container code {
   font-family: 'Fira Code', monospace;
 }
