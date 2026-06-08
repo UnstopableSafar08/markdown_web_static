@@ -6,6 +6,9 @@ let notes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 let activeNoteId = null;
 let editor = null;
 let saveTimeout = null;
+let syncScrollEnabled = false;
+let isSyncing = false;
+let monacoScrollHeight = 0;
 
 // Monaco Loading
 require.config({ paths: { vs: "assets/js/monaco/vs" } });
@@ -46,6 +49,23 @@ require(["vs/editor/editor.main"], function () {
   editor.onDidChangeModelContent(() => {
     handleAutoSave();
     renderMarkdown(editor.getValue());
+  });
+
+  editor.onDidScrollChange((e) => {
+    monacoScrollHeight = e.scrollHeight;
+    if (!syncScrollEnabled || isSyncing) return;
+    isSyncing = true;
+    const preview = document.getElementById("preview-container");
+    if (preview) {
+      const maxPreview = preview.scrollHeight - preview.clientHeight;
+      if (maxPreview > 0) {
+        const editorHeight = editor.getLayoutInfo().height;
+        const maxEditor = Math.max(0, monacoScrollHeight - editorHeight);
+        const ratio = maxEditor > 0 ? e.scrollTop / maxEditor : 0;
+        preview.scrollTop = Math.min(ratio * maxPreview, maxPreview);
+      }
+    }
+    isSyncing = false;
   });
 
   init();
@@ -872,6 +892,25 @@ function setupEventListeners() {
       showToast("HTML file exported successfully!");
     }
   };
+
+  document.getElementById("sync-scroll-btn").onclick = () => {
+    syncScrollEnabled = !syncScrollEnabled;
+    document.getElementById("sync-scroll-btn").classList.toggle("active", syncScrollEnabled);
+  };
+
+  document.getElementById("preview-container").addEventListener("scroll", () => {
+    if (!syncScrollEnabled || isSyncing || !editor) return;
+    isSyncing = true;
+    const preview = document.getElementById("preview-container");
+    const maxPreview = preview.scrollHeight - preview.clientHeight;
+    if (maxPreview > 0 && monacoScrollHeight > 0) {
+      const ratio = preview.scrollTop / maxPreview;
+      const editorHeight = editor.getLayoutInfo().height;
+      const maxEditor = Math.max(0, monacoScrollHeight - editorHeight);
+      editor.setScrollPosition({ scrollTop: Math.min(ratio * maxEditor, maxEditor) });
+    }
+    isSyncing = false;
+  });
 
   document.getElementById("delete-note-btn").onclick = () => {
     document.getElementById("delete-modal").style.display = "flex";

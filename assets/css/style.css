@@ -226,6 +226,12 @@ body {
   font-weight: 600;
 }
 
+.btn.active {
+  background: var(--accent-muted);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .pane-container {
   flex: 1;
   display: flex;
