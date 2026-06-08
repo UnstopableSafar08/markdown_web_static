@@ -165,8 +165,14 @@ function renderMarkdown(content) {
         if (lang === "mermaid") {
           return '<pre class="mermaid">' + text + "</pre>";
         }
+        const escaped = text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
         const langAttr = lang ? ' class="language-' + lang + '"' : "";
-        return "<pre><code" + langAttr + ">" + text + "</code></pre>";
+        return "<pre><code" + langAttr + ">" + escaped + "</code></pre>";
       };
       html = marked.parse(content, { renderer });
     } else if (window.marked && window.marked.parse) {
@@ -943,8 +949,14 @@ function renderMarkdownInternal(content) {
       if (lang === "mermaid") {
         return '<pre class="mermaid">' + text + "</pre>";
       }
+      const escaped = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
       const langAttr = lang ? ' class="language-' + lang + '"' : "";
-      return "<pre><code" + langAttr + ">" + text + "</code></pre>";
+      return "<pre><code" + langAttr + ">" + escaped + "</code></pre>";
     };
     return parser.parse(content, { renderer });
   };
